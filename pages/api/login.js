@@ -15,7 +15,7 @@ export default async function login(req, res) {
     });
     if (user) {
       compare(body.password, user.password, async (err, result) => {
-        if (err) res.status(500).send(err.message);
+        if (err) return res.status(500).json({ message: err.message });
         if (!result) {
           res.status(401).json({ message: "Wrong Password" });
         }

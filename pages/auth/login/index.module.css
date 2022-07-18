@@ -1,0 +1,16 @@
+.cont {
+  background-color: var(--body-bg);
+  color: var(--font-color);
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+}
+
+.card {
+  background-color: var(--body-bg-faded);
+  padding: 30px;
+  border: 1px solid #fff;
+  box-shadow: 0 0 5px #000;
+  border-radius: 30px;
+  min-width: 30vw;
+}
