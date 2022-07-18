@@ -1,9 +1,22 @@
+:root {
+  --body-bg: #191726;
+  --body-bg-faded: #23212e;
+  --font-color: #fff;
+  --font-family: "Noto Sans";
+  --color-secodary: #2979ff;
+}
+
+html {
+  font-family: var(--font-family), sans-serif;
+  font-weight: 900;
+}
+
 html,
 body {
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  /* font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif; */
 }
 
 a {
