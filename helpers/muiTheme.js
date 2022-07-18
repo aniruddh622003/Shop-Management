@@ -14,4 +14,7 @@ export const theme = createTheme({
       paper: "#2e2c3b",
     },
   },
+  typography: {
+    fontFamily: "Noto Sans,sans-serif",
+  },
 });
