@@ -17,14 +17,15 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import styles from "./index.module.css";
-import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
+import { IoPowerSharp } from "react-icons/io5";
 import { manageLinks } from "../../../utils/drawerLinks";
 import Link from "next/link";
-
-const drawerWidth = 240;
+import { drawerWidth } from "../../../utils/constants";
+import { useRouter } from "next/router";
 
 const Header = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const router = useRouter();
 
   const toggleDrawer = (open) => (event) => {
     if (
@@ -36,7 +37,12 @@ const Header = () => {
 
     setDrawerOpen(open);
   };
-  console.log(drawerOpen);
+
+  const logout = () => {
+    localStorage.removeItem("shop_auth_key");
+    router.push("/auth");
+  };
+
   return (
     <>
       <AppBar
@@ -53,8 +59,8 @@ const Header = () => {
               Shop Name
             </Typography>
           </Link>
-          <Button color="inherit">
-            <PowerSettingsNewIcon sx={{ mr: 1 }} />
+          <Button color="inherit" onClick={() => logout()}>
+            <IoPowerSharp style={{ marginRight: "10px" }} />
             Log Out
           </Button>
         </Toolbar>

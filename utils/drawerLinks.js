@@ -1,9 +1,9 @@
-import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
+import { BsPerson } from "react-icons/bs";
 
 export const manageLinks = [
   {
     title: "User",
-    icon: <PersonOutlineIcon />,
+    icon: <BsPerson />,
     link: "/protected/user",
   },
 ];
