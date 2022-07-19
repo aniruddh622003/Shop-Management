@@ -9,20 +9,24 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emotion/cache": "^11.9.3",
     "@emotion/react": "^11.9.3",
+    "@emotion/server": "^11.4.0",
     "@emotion/styled": "^11.9.3",
     "@fontsource/noto-sans": "^4.5.10",
     "@mui/material": "^5.9.0",
     "@prisma/client": "^4.0.0",
     "axios": "^0.27.2",
     "bcrypt": "^5.0.1",
+    "formik": "^2.2.9",
     "jsonwebtoken": "^8.5.1",
     "next": "12.2.2",
     "notistack": "^2.0.5",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-icons": "^4.4.0",
-    "react-query": "^3.39.2"
+    "react-query": "^3.39.2",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "eslint": "8.20.0",

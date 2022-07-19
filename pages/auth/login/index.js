@@ -15,7 +15,7 @@ const Login = () => {
   useEffect(() => {
     const jwt = localStorage.getItem("shop_auth_key");
     if (jwt) router.push("/protected");
-  }, []);
+  }, [router]);
 
   const { mutate: handleLogin, isLoading } = useMutation(AuthService.login, {
     onError: (err) => {

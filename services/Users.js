@@ -7,4 +7,9 @@ UserService.getAll = async () => {
   return await res.data;
 };
 
+UserService.create = async (data) => {
+  const res = await API.post(`user`, data);
+  return await res.data;
+};
+
 export default UserService;

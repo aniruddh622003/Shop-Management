@@ -2,12 +2,21 @@ import React from "react";
 import { useQuery } from "react-query";
 import UserService from "../../../services/Users";
 import { drawerWidth } from "../../../utils/constants";
-import { Box, Chip, MenuItem, Toolbar, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Chip,
+  MenuItem,
+  Toolbar,
+  Typography,
+} from "@mui/material";
 import styles from "./index.module.css";
 import StickyHeadTable from "../../../components/shared/Table";
 import EllipsesDowpdown from "../../../components/shared/EllipsesDropdown";
+import AddUser from "../../../components/user/AddUser";
 
 const UserList = () => {
+  const [addUserOpen, setAddUserOpen] = React.useState(false);
   const { data: users, isLoading } = useQuery(
     ["users-getall"],
     () => UserService.getAll(),
@@ -19,9 +28,9 @@ const UserList = () => {
   );
 
   const dropDown = (row) => (
-    <>
+    <div>
       <MenuItem>{row.enabled ? "Disable User" : "Enable User"}</MenuItem>
-    </>
+    </div>
   );
 
   const columns = [
@@ -67,10 +76,18 @@ const UserList = () => {
           padding: 3,
         }}
       >
-        {console.log(users)}
-        <Typography variant="h6" component="div" mb={3}>
-          All Users
-        </Typography>
+        <Box sx={{ display: "flex", alignItems: "center", gap: "30px" }} mb={3}>
+          <Typography variant="h6" component="div">
+            All Users
+          </Typography>
+          <Button
+            sx={{ color: "#fff", border: "1px solid #ffffff99" }}
+            onClick={() => setAddUserOpen(true)}
+          >
+            Add User
+          </Button>
+        </Box>
+
         {!isLoading ? (
           <div>
             <StickyHeadTable rows={users} columns={columns} />
@@ -79,6 +96,7 @@ const UserList = () => {
           "Loading"
         )}
       </Box>
+      <AddUser open={addUserOpen} handleClose={() => setAddUserOpen(false)} />
     </div>
   );
 };

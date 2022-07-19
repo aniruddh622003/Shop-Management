@@ -4,12 +4,19 @@ import { QueryClientProvider } from "react-query";
 import queryClient from "../helpers/queryClient";
 import PageLayout from "../layout/PageLayout";
 import { SnackbarProvider } from "notistack";
-import { ThemeProvider } from "@emotion/react";
+import { CacheProvider, ThemeProvider } from "@emotion/react";
 import { theme } from "../helpers/muiTheme";
 import { CssBaseline } from "@mui/material";
 import Head from "next/head";
+import createEmotionCache from "../utils/createEmotionCache";
 
-function MyApp({ Component, pageProps }) {
+const clientSideEmotionCache = createEmotionCache();
+
+function MyApp({
+  Component,
+  emotionCache = clientSideEmotionCache,
+  pageProps,
+}) {
   return (
     <>
       <Head>
@@ -26,12 +33,14 @@ function MyApp({ Component, pageProps }) {
         autoHideDuration={3000}
       >
         <QueryClientProvider client={queryClient}>
-          <ThemeProvider theme={theme}>
-            <PageLayout>
-              <CssBaseline />
-              <Component {...pageProps} />
-            </PageLayout>
-          </ThemeProvider>
+          <CacheProvider value={emotionCache}>
+            <ThemeProvider theme={theme}>
+              <PageLayout>
+                <CssBaseline />
+                <Component {...pageProps} />
+              </PageLayout>
+            </ThemeProvider>
+          </CacheProvider>
         </QueryClientProvider>
       </SnackbarProvider>
     </>
