@@ -12,4 +12,9 @@ UserService.create = async (data) => {
   return await res.data;
 };
 
+UserService.changeStatus = async ({ id, body }) => {
+  const res = await API.post(`user/changeStatus/${id}`, body);
+  return await res.data;
+};
+
 export default UserService;

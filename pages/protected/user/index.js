@@ -1,5 +1,5 @@
 import React from "react";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import UserService from "../../../services/Users";
 import { drawerWidth } from "../../../utils/constants";
 import {
@@ -14,9 +14,12 @@ import styles from "./index.module.css";
 import StickyHeadTable from "../../../components/shared/Table";
 import EllipsesDowpdown from "../../../components/shared/EllipsesDropdown";
 import AddUser from "../../../components/user/AddUser";
+import { useSnackbar } from "notistack";
+import queryClient from "../../../helpers/queryClient";
 
 const UserList = () => {
   const [addUserOpen, setAddUserOpen] = React.useState(false);
+  const { enqueueSnackbar } = useSnackbar();
   const { data: users, isLoading } = useQuery(
     ["users-getall"],
     () => UserService.getAll(),
@@ -24,12 +27,35 @@ const UserList = () => {
       onSuccess: (res) => {
         console.log(res);
       },
+      onError: (err) => {
+        enqueueSnackbar(err.response.data.message, { variant: "error" });
+      },
     }
   );
 
+  const { mutate: changeStatus, isLoading: statusLoading } = useMutation(
+    UserService.changeStatus,
+    {
+      onError: (err) => {
+        enqueueSnackbar(err.response.data.message, { variant: "error" });
+      },
+      onSuccess: (_) => {
+        enqueueSnackbar("Status Changes", { variant: "success" });
+        queryClient.invalidateQueries("users-getall");
+      },
+    }
+  );
+
+  const changeUserStatus = (row) => {
+    console.log(row);
+    changeStatus({ id: row.id, body: { enabled: !row.enabled } });
+  };
+
   const dropDown = (row) => (
     <div>
-      <MenuItem>{row.enabled ? "Disable User" : "Enable User"}</MenuItem>
+      <MenuItem onClick={() => changeUserStatus(row)}>
+        {row.enabled ? "Disable User" : "Enable User"}
+      </MenuItem>
     </div>
   );
 
