@@ -2,10 +2,10 @@
 import { PrismaClient } from "@prisma/client";
 import { hash } from "bcrypt";
 import { withAPIMiddleware } from "../../../middleware/APIMiddleware";
-import { JWTMiddleWare } from "../../../middleware/JWTMiddleware";
+import { prismaClient } from "../../../utils/prisma";
 
 async function handler(req, res) {
-  const prisma = new PrismaClient();
+  const prisma = prismaClient;
 
   if (req.method == "GET") {
     const users = await prisma.user.findMany();
@@ -13,9 +13,10 @@ async function handler(req, res) {
     return res.send(users);
   } else if (req.method == "POST") {
     const { body } = req;
+    console.log("test");
+    console.log(body);
 
     hash(body.password, 10, async (err, hash) => {
-      console.log(body);
       const newUser = await prisma.user.create({
         data: {
           username: body.username,
@@ -29,4 +30,4 @@ async function handler(req, res) {
   }
 }
 
-export default withAPIMiddleware(handler, JWTMiddleWare);
+export default withAPIMiddleware(handler, true);

@@ -31,7 +31,6 @@ export const JWTMiddleWare = async (req, res) => {
       return { req, res, error: true };
     }
     req.user = currentUser;
-    req.body = { test: "test123" };
     return { req, res, error: false };
   } catch (err) {
     res.status(401).json({

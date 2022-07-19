@@ -2,9 +2,10 @@ import { PrismaClient } from "@prisma/client";
 import { compare } from "bcrypt";
 import { sign } from "jsonwebtoken";
 import { JWT_SECRET } from "../../utils/constants";
+import { prismaClient } from "../../utils/prisma";
 
 export default async function login(req, res) {
-  const prisma = new PrismaClient();
+  const prisma = prismaClient;
 
   if (req.method == "POST") {
     const { body } = req;
@@ -14,6 +15,9 @@ export default async function login(req, res) {
       },
     });
     if (user) {
+      if (!user.enabled) {
+        return res.status(401).json({ message: "User disabled" });
+      }
       compare(body.password, user.password, async (err, result) => {
         if (err) return res.status(500).json({ message: err.message });
         if (!result) {
