@@ -9,6 +9,7 @@ async function handler(req, res) {
 
   if (req.method == "GET") {
     const users = await prisma.user.findMany();
+    users.forEach((ele) => delete ele.password);
     return res.send(users);
   } else if (req.method == "POST") {
     const { body } = req;

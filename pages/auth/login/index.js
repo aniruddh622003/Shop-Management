@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./index.module.css";
 import { useSnackbar } from "notistack";
 import { Box, Button, Grid, TextField } from "@mui/material";
@@ -11,6 +11,11 @@ const Login = () => {
   const [pass, setPass] = useState("");
   const { enqueueSnackbar } = useSnackbar();
   const router = useRouter();
+
+  useEffect(() => {
+    const jwt = localStorage.getItem("shop_auth_key");
+    if (jwt) router.push("/protected");
+  }, []);
 
   const { mutate: handleLogin, isLoading } = useMutation(AuthService.login, {
     onError: (err) => {
@@ -88,13 +93,6 @@ const Login = () => {
             onClick={() => onLogin()}
           >
             Submit
-          </Button>
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={() => onTest()}
-          >
-            Test
           </Button>
         </Grid>
 
