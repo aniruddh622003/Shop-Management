@@ -2,7 +2,6 @@
 import { PrismaClient } from "@prisma/client";
 import { hash } from "bcrypt";
 import { withAPIMiddleware } from "../../../middleware/APIMiddleware";
-import { JWTMiddleWare } from "../../../middleware/JWTMiddleware";
 import { prismaClient } from "../../../utils/prisma";
 
 async function handler(req, res) {
@@ -31,4 +30,4 @@ async function handler(req, res) {
   }
 }
 
-export default withAPIMiddleware(handler, JWTMiddleWare);
+export default withAPIMiddleware(handler, true);
