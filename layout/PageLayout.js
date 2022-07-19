@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import React, { useEffect, useMemo } from "react";
 import Header from "../components/shared/Header";
+import { drawerWidth } from "../utils/constants";
 
 const noHeader = ["/auth"];
 
@@ -21,7 +22,14 @@ const PageLayout = ({ children }) => {
   return (
     <>
       {showHeader && <Header />}
-      <main>{children}</main>
+      <main
+        style={{
+          width: showHeader ? `calc(100vw - ${drawerWidth}px)` : "100vw",
+          marginLeft: showHeader ? `${drawerWidth}px` : 0,
+        }}
+      >
+        {children}
+      </main>
     </>
   );
 };

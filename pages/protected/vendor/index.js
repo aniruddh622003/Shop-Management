@@ -102,13 +102,13 @@ const UserList = () => {
       >
         <Box sx={{ display: "flex", alignItems: "center", gap: "30px" }} mb={3}>
           <Typography variant="h6" component="div">
-            All Users
+            All Vendors
           </Typography>
           <Button
             sx={{ color: "#fff", border: "1px solid #ffffff99" }}
             onClick={() => setAddUserOpen(true)}
           >
-            Add User
+            Add Vendor
           </Button>
         </Box>
 
