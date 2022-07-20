@@ -1,7 +1,6 @@
 import React from "react";
 import { useMutation, useQuery } from "react-query";
-import UserService from "../../../services/Users";
-import { drawerWidth } from "../../../utils/constants";
+import { FiPhoneCall } from "react-icons/fi";
 import {
   Box,
   Button,
@@ -15,33 +14,20 @@ import StickyHeadTable from "../../../components/shared/Table";
 import EllipsesDowpdown from "../../../components/shared/EllipsesDropdown";
 import AddUser from "../../../components/user/AddUser";
 import { useSnackbar } from "notistack";
-import queryClient from "../../../helpers/queryClient";
+import VendorService from "../../../services/Vendor";
 
 const UserList = () => {
   const [addUserOpen, setAddUserOpen] = React.useState(false);
   const { enqueueSnackbar } = useSnackbar();
-  const { data: users, isLoading } = useQuery(
-    ["users-getall"],
-    () => UserService.getAll(),
+  const { data: vendors, isLoading } = useQuery(
+    ["vendors-getall"],
+    () => VendorService.getAll(),
     {
       onSuccess: (res) => {
         console.log(res);
       },
       onError: (err) => {
         enqueueSnackbar(err.response.data.message, { variant: "error" });
-      },
-    }
-  );
-
-  const { mutate: changeStatus, isLoading: statusLoading } = useMutation(
-    UserService.changeStatus,
-    {
-      onError: (err) => {
-        enqueueSnackbar(err.response.data.message, { variant: "error" });
-      },
-      onSuccess: (_) => {
-        enqueueSnackbar("Status Changes", { variant: "success" });
-        queryClient.invalidateQueries("users-getall");
       },
     }
   );
@@ -53,9 +39,7 @@ const UserList = () => {
 
   const dropDown = (row) => (
     <div>
-      <MenuItem onClick={() => changeUserStatus(row)}>
-        {row.enabled ? "Disable User" : "Enable User"}
-      </MenuItem>
+      <MenuItem>View Products</MenuItem>
     </div>
   );
 
@@ -66,18 +50,36 @@ const UserList = () => {
       minWidth: 70,
     },
     {
-      label: "Username",
-      id: "username",
+      label: "Name",
+      id: "name",
       minWidth: 170,
     },
     {
-      label: "Enabled",
-      id: "enabled",
+      label: "Address",
+      id: "address",
+      minWidth: 250,
+    },
+    {
+      label: "Contact",
+      id: "contact",
       minWidth: 170,
       render: (ele) => (
-        <Chip label={ele ? "Yes" : "No"} color={ele ? "success" : "error"} />
+        <a href={`tel:${ele}`}>
+          <Button sx={{ color: "#fff" }} color="success" variant="outlined">
+            <FiPhoneCall style={{ marginRight: "10px" }} />
+            {ele}
+          </Button>
+        </a>
       ),
     },
+    // {
+    //   label: "Enabled",
+    //   id: "enabled",
+    //   minWidth: 170,
+    //   render: (ele) => (
+    //     <Chip label={ele ? "Yes" : "No"} color={ele ? "success" : "error"} />
+    //   ),
+    // },
 
     {
       title: "Action",
@@ -101,19 +103,19 @@ const UserList = () => {
       >
         <Box sx={{ display: "flex", alignItems: "center", gap: "30px" }} mb={3}>
           <Typography variant="h6" component="div">
-            All Users
+            All Vendors
           </Typography>
           <Button
             sx={{ color: "#fff", border: "1px solid #ffffff99" }}
             onClick={() => setAddUserOpen(true)}
           >
-            Add User
+            Add Vendor
           </Button>
         </Box>
 
         {!isLoading ? (
           <div>
-            <StickyHeadTable rows={users} columns={columns} />
+            <StickyHeadTable rows={vendors} columns={columns} />
           </div>
         ) : (
           "Loading"

@@ -16,3 +16,10 @@ model User {
   password String @db.VarChar(255)
   enabled Boolean @default(true)
 }
+
+model Vendor {
+  id Int @id @default(autoincrement())
+  name String @db.VarChar(255)
+  address String @db.VarChar(255)
+  contact String @db.VarChar(10)
+}

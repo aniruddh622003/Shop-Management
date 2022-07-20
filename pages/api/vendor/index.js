@@ -8,21 +8,21 @@ async function handler(req, res) {
   const prisma = prismaClient;
 
   if (req.method == "GET") {
-    const users = await prisma.user.findMany();
-    users.forEach((ele) => delete ele.password);
-    return res.send(users);
+    const vendors = await prisma.vendor.findMany();
+    return res.send(vendors);
   } else if (req.method == "POST") {
     const { body } = req;
+    console.log("vendors");
+    console.log(body);
 
-    hash(body.password, 10, async (err, hash) => {
-      const newUser = await prisma.user.create({
-        data: {
-          username: body.username,
-          password: hash,
-        },
-      });
-      return res.status(201).send(newUser);
+    const newVendor = await prisma.vendor.create({
+      data: {
+        name: body.name,
+        address: body.address,
+        contact: body.contact,
+      },
     });
+    return res.status(201).send(newVendor);
   } else {
     res.status(405).json({ message: "Wrong HTTP Method" });
   }
