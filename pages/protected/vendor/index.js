@@ -39,9 +39,7 @@ const UserList = () => {
 
   const dropDown = (row) => (
     <div>
-      <MenuItem onClick={() => changeUserStatus(row)}>
-        {row.enabled ? "Disable User" : "Enable User"}
-      </MenuItem>
+      <MenuItem>View Products</MenuItem>
     </div>
   );
 
@@ -98,7 +96,6 @@ const UserList = () => {
 
   return (
     <div className={styles.cont}>
-      <Toolbar />
       <Box
         sx={{
           padding: 3,

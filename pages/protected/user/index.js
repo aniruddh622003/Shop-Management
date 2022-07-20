@@ -94,7 +94,6 @@ const UserList = () => {
 
   return (
     <div className={styles.cont}>
-      <Toolbar />
       <Box
         sx={{
           padding: 3,

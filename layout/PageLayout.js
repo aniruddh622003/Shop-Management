@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import React, { useEffect, useMemo } from "react";
 import Header from "../components/shared/Header";
 import { drawerWidth } from "../utils/constants";
+import { Toolbar } from "@mui/material";
 
 const noHeader = ["/auth"];
 
@@ -28,6 +29,7 @@ const PageLayout = ({ children }) => {
           marginLeft: showHeader ? `${drawerWidth}px` : 0,
         }}
       >
+        {showHeader && <Toolbar />}
         {children}
       </main>
     </>
