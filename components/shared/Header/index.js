@@ -18,9 +18,9 @@ import {
 import React, { useState } from "react";
 import styles from "./index.module.css";
 import { IoPowerSharp } from "react-icons/io5";
-import { manageLinks } from "../../../utils/drawerLinks";
+import { inventoryLinks, manageLinks } from "utils/drawerLinks";
 import Link from "next/link";
-import { drawerWidth } from "../../../utils/constants";
+import { drawerWidth } from "utils/constants";
 import { useRouter } from "next/router";
 
 const Header = () => {
@@ -94,6 +94,21 @@ const Header = () => {
             }}
             subheader={<li />}
           >
+            <li key={`drawer-inventory`}>
+              <ul>
+                <ListSubheader>Inventory</ListSubheader>
+                {inventoryLinks.map((ele) => (
+                  <ListItem key={`drawer-manage-${ele.title}`} disablePadding>
+                    <Link href={ele.link}>
+                      <ListItemButton>
+                        <ListItemIcon>{ele.icon}</ListItemIcon>
+                        <ListItemText primary={ele.title} />
+                      </ListItemButton>
+                    </Link>
+                  </ListItem>
+                ))}
+              </ul>
+            </li>
             <li key={`drawer-manage`}>
               <ul>
                 <ListSubheader>Manage</ListSubheader>
