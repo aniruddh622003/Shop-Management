@@ -15,10 +15,11 @@ import EllipsesDowpdown from "../../../components/shared/EllipsesDropdown";
 import AddUser from "../../../components/user/AddUser";
 import { useSnackbar } from "notistack";
 import VendorService from "../../../services/Vendor";
+import { useRouter } from "next/router";
 
 const UserList = () => {
-  const [addUserOpen, setAddUserOpen] = React.useState(false);
   const { enqueueSnackbar } = useSnackbar();
+  const router = useRouter();
   const { data: vendors, isLoading } = useQuery(
     ["vendors-getall"],
     () => VendorService.getAll(),
@@ -32,14 +33,12 @@ const UserList = () => {
     }
   );
 
-  const changeUserStatus = (row) => {
-    console.log(row);
-    changeStatus({ id: row.id, body: { enabled: !row.enabled } });
-  };
-
   const dropDown = (row) => (
     <div>
       <MenuItem>View Products</MenuItem>
+      <MenuItem onClick={() => router.push(`/protected/vendor/edit/${row.id}`)}>
+        Edit Vendor
+      </MenuItem>
     </div>
   );
 
@@ -107,7 +106,7 @@ const UserList = () => {
           </Typography>
           <Button
             sx={{ color: "#fff", border: "1px solid #ffffff99" }}
-            onClick={() => setAddUserOpen(true)}
+            onClick={() => router.push(`/protected/vendor/add`)}
           >
             Add Vendor
           </Button>
@@ -121,7 +120,6 @@ const UserList = () => {
           "Loading"
         )}
       </Box>
-      <AddUser open={addUserOpen} handleClose={() => setAddUserOpen(false)} />
     </div>
   );
 };

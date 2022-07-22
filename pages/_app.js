@@ -9,6 +9,7 @@ import { theme } from "../helpers/muiTheme";
 import { CssBaseline } from "@mui/material";
 import Head from "next/head";
 import createEmotionCache from "../utils/createEmotionCache";
+import { ReactQueryDevtools } from "react-query/devtools";
 
 const clientSideEmotionCache = createEmotionCache();
 
@@ -38,6 +39,7 @@ function MyApp({
               <PageLayout>
                 <CssBaseline />
                 <Component {...pageProps} />
+                <ReactQueryDevtools initialIsOpen={false} />
               </PageLayout>
             </ThemeProvider>
           </CacheProvider>
