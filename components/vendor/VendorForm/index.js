@@ -12,7 +12,7 @@ const ValidationScheme = Yup.object().shape({
   address: Yup.string().required("Please enter vendor address"),
 });
 
-const VendorForm = ({ initVals, handleSubmit }) => {
+const VendorForm = ({ initVals, handleSubmit, buttonText }) => {
   return (
     <Formik
       initialValues={initVals}
@@ -36,7 +36,7 @@ const VendorForm = ({ initVals, handleSubmit }) => {
               minRows={4}
             />
             <Button variant="contained" color="secondary" type="submit">
-              Create Vendor
+              {buttonText}
             </Button>
           </Grid>
         </Grid>

@@ -23,7 +23,7 @@ const AddVendorPage = () => {
         console.log(res);
         enqueueSnackbar("Vendor Created", { variant: "success" });
         router.replace("/protected/vendor");
-        queryClient.invalidateQueries("users-getall");
+        queryClient.invalidateQueries("vendors-getall");
       },
     }
   );
@@ -48,7 +48,11 @@ const AddVendorPage = () => {
       <Typography variant="h5" component="div">
         Add Vendor
       </Typography>
-      <VendorForm initVals={{}} handleSubmit={handleSubmit} />
+      <VendorForm
+        initVals={{}}
+        handleSubmit={handleSubmit}
+        buttonText="Create Vendor"
+      />
     </Box>
   );
 };

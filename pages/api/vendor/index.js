@@ -9,7 +9,7 @@ async function handler(req, res) {
 
   if (req.method == "GET") {
     const vendors = await prisma.vendor.findMany();
-    return res.send(vendors);
+    return res.status(200).send(vendors);
   } else if (req.method == "POST") {
     const { body } = req;
     console.log("vendors");
