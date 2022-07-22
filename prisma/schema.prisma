@@ -22,4 +22,16 @@ model Vendor {
   name String @db.VarChar(255)
   address String @db.VarChar(255)
   contact String @db.VarChar(10)
+  products Products[]
+}
+
+model Products{
+  id Int @id @default(autoincrement())
+  name String @db.VarChar(255)
+  BuyPrice Float
+  MRP Float
+  Quantity Int
+  vendor Vendor @relation(fields: [vendorID], references: [id])
+  vendorID Int
+  @@unique([name, MRP, vendorID])
 }

@@ -17,7 +17,7 @@ import { useSnackbar } from "notistack";
 import VendorService from "../../../services/Vendor";
 import { useRouter } from "next/router";
 
-const VendorList = () => {
+const ProductList = () => {
   const { enqueueSnackbar } = useSnackbar();
   const router = useRouter();
   const { data: vendors, isLoading } = useQuery(
@@ -102,7 +102,7 @@ const VendorList = () => {
       >
         <Box sx={{ display: "flex", alignItems: "center", gap: "30px" }} mb={3}>
           <Typography variant="h6" component="div">
-            All Vendors
+            All Products
           </Typography>
           <Button
             sx={{ color: "#fff", border: "1px solid #ffffff99" }}
@@ -124,4 +124,4 @@ const VendorList = () => {
   );
 };
 
-export default VendorList;
+export default ProductList;
