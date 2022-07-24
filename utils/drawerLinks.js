@@ -1,5 +1,13 @@
 import { BsPerson } from "react-icons/bs";
-import { FaPeopleCarry } from "react-icons/fa";
+import { FaPeopleCarry, FaStore } from "react-icons/fa";
+
+export const inventoryLinks = [
+  {
+    title: "Products",
+    icon: <FaStore />,
+    link: "/protected/products",
+  },
+];
 
 export const manageLinks = [
   {

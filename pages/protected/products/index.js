@@ -12,17 +12,16 @@ import {
 import styles from "./index.module.css";
 import StickyHeadTable from "../../../components/shared/Table";
 import EllipsesDowpdown from "../../../components/shared/EllipsesDropdown";
-import AddUser from "../../../components/user/AddUser";
 import { useSnackbar } from "notistack";
-import VendorService from "../../../services/Vendor";
 import { useRouter } from "next/router";
+import ProductService from "services/Products";
 
-const VendorList = () => {
+const ProductList = () => {
   const { enqueueSnackbar } = useSnackbar();
   const router = useRouter();
   const { data: vendors, isLoading } = useQuery(
-    ["vendors-getall"],
-    () => VendorService.getAll(),
+    ["products-getall"],
+    () => ProductService.getAll(),
     {
       onSuccess: (res) => {
         console.log(res);
@@ -54,32 +53,28 @@ const VendorList = () => {
       minWidth: 170,
     },
     {
-      label: "Address",
-      id: "address",
-      minWidth: 250,
+      label: "Vendor",
+      id: "vendor.name",
+      minWidth: 170,
     },
     {
-      label: "Contact",
-      id: "contact",
-      minWidth: 170,
-      render: (ele) => (
-        <a href={`tel:${ele}`}>
-          <Button sx={{ color: "#fff" }} color="success" variant="outlined">
-            <FiPhoneCall style={{ marginRight: "10px" }} />
-            {ele}
-          </Button>
-        </a>
-      ),
+      label: "Quantity",
+      id: "Quantity",
+      minWidth: 100,
+      render: (ele) => <p>{ele} units</p>,
     },
-    // {
-    //   label: "Enabled",
-    //   id: "enabled",
-    //   minWidth: 170,
-    //   render: (ele) => (
-    //     <Chip label={ele ? "Yes" : "No"} color={ele ? "success" : "error"} />
-    //   ),
-    // },
-
+    {
+      label: "Buy Price",
+      id: "BuyPrice",
+      minWidth: 100,
+      render: (ele) => <p>₹ {ele}</p>,
+    },
+    {
+      label: "MRP",
+      id: "MRP",
+      minWidth: 100,
+      render: (ele) => <p>₹ {ele}</p>,
+    },
     {
       title: "Action",
       key: "action",
@@ -102,13 +97,13 @@ const VendorList = () => {
       >
         <Box sx={{ display: "flex", alignItems: "center", gap: "30px" }} mb={3}>
           <Typography variant="h6" component="div">
-            All Vendors
+            All Products
           </Typography>
           <Button
             sx={{ color: "#fff", border: "1px solid #ffffff99" }}
-            onClick={() => router.push(`/protected/vendor/add`)}
+            onClick={() => router.push(`/protected/products/add`)}
           >
-            Add Vendor
+            Add Product
           </Button>
         </Box>
 
@@ -124,4 +119,4 @@ const VendorList = () => {
   );
 };
 
-export default VendorList;
+export default ProductList;

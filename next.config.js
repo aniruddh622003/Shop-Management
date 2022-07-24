@@ -2,6 +2,9 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
+  env: {
+    superKey: "admin",
+  },
 };
 
 module.exports = nextConfig;
