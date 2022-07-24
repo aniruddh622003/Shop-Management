@@ -5,10 +5,12 @@ import { Box, Button, Grid, TextField } from "@mui/material";
 import { useMutation } from "react-query";
 import AuthService from "../../../services/Auth";
 import { useRouter } from "next/router";
+import AddUser from "components/user/AddUser";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [pass, setPass] = useState("");
+  const [addUserOpen, setAddUserOpen] = React.useState(true);
   const { enqueueSnackbar } = useSnackbar();
   const router = useRouter();
 
@@ -94,21 +96,17 @@ const Login = () => {
           >
             Submit
           </Button>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={() => setAddUserOpen(true)}
+            sx={{ ml: 3 }}
+          >
+            New User
+          </Button>
         </Grid>
 
-        {/* <Form.Group className="mb-5" as={Col} xs="12">
-          <Form.Label>Password</Form.Label>
-          <Form.Control required type="password" placeholder="Password" />
-        </Form.Group>
-        <Col>
-          <Button
-            className="mb-3"
-            as="input"
-            type="submit"
-            value="Submit"
-            size="lg"
-          />
-        </Col> */}
+        <AddUser open={addUserOpen} handleClose={() => setAddUserOpen(false)} />
       </div>
     </div>
   );

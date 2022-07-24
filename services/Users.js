@@ -8,7 +8,7 @@ UserService.getAll = async () => {
 };
 
 UserService.create = async (data) => {
-  const res = await API.post(`user`, data);
+  const res = await API.post(`user/create`, data);
   return await res.data;
 };
 
