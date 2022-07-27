@@ -99,7 +99,7 @@ async function handler(req, res) {
           connect: [...purchaseIDs],
         },
         purchasedByID: req.user.id,
-        Note: body.note,
+        Note: body.note ? body.note : "",
       },
     });
     const totalAmount = body.products.reduce(

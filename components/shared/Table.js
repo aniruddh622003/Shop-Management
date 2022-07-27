@@ -42,7 +42,7 @@ export default function StickyHeadTable({ rows, columns }) {
           <TableBody>
             {rows
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row) => {
+              .map((row, idx) => {
                 return (
                   <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
                     {columns.map((column) => {
@@ -59,7 +59,7 @@ export default function StickyHeadTable({ rows, columns }) {
                         const value = row[column.id];
                         return (
                           <TableCell key={column.id} align={column.align}>
-                            {column.render(value, row)}
+                            {column.render(value, row, idx)}
                           </TableCell>
                         );
                       }

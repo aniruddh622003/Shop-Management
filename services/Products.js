@@ -10,6 +10,10 @@ ProductService.getAll = async () => {
   });
   return await res.data;
 };
+ProductService.create = async (data) => {
+  const res = await API.post(`products`, data);
+  return await res.data;
+};
 
 ProductService.create;
 
