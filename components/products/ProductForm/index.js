@@ -6,25 +6,43 @@ import { FieldArray, Form, Formik } from "formik";
 import { AiFillDelete } from "react-icons/ai";
 import React from "react";
 import * as Yup from "yup";
+import { useSnackbar } from "notistack";
+import { useRouter } from "next/router";
+import { useQuery } from "react-query";
+import VendorService from "services/Vendor";
 
 const ValidationScheme = Yup.object().shape({
-  name: Yup.string().required("Please enter vendor name"),
-  contact: Yup.number()
-    .required("Please enter contact number")
-    .typeError("Contact number should be a number"),
-  address: Yup.string().required("Please enter vendor address"),
+  modeOfPayment: Yup.string().required("Enter mode of payment"),
+  products: Yup.array().of(
+    Yup.object().shape({
+      name: Yup.string().required("Enter product name"),
+      buyPrice: Yup.number()
+        .typeError("Buy Price must be a number")
+        .min(0, "Postive values allowed")
+        .required("Enter buy price"),
+      mrp: Yup.number()
+        .typeError("MRP must be a number")
+        .min(0, "Postive values allowed")
+        .required("Enter MRP"),
+      quantity: Yup.number()
+        .typeError("Quantity must be a number")
+        .min(0, "Postive values allowed")
+        .required("Enter Quantity"),
+      vendorID: Yup.number().required("Please Select a vendor"),
+    })
+  ),
 });
 
-const columns = (remove) => [
+const columns = (remove, vendorOptions) => [
   {
     label: "ID",
-    id: "_",
+    id: "id",
     minWidth: 40,
     render: (_, __, id) => <p>{id + 1}</p>,
   },
   {
     label: "Name",
-    id: "_",
+    id: "name",
     minWidth: 70,
     render: (_, __, idx) => (
       <InputField name={`products.${idx}.name`} label="Product Name" />
@@ -32,7 +50,7 @@ const columns = (remove) => [
   },
   {
     label: "Purchase Price",
-    id: "_",
+    id: "buy",
     minWidth: 70,
     render: (_, __, idx) => (
       <InputField
@@ -43,7 +61,7 @@ const columns = (remove) => [
   },
   {
     label: "MRP",
-    id: "_",
+    id: "mrp",
     minWidth: 70,
     render: (_, __, idx) => (
       <InputField name={`products.${idx}.mrp`} label="MRP (In Rs.)" />
@@ -51,7 +69,7 @@ const columns = (remove) => [
   },
   {
     label: "Quantity",
-    id: "_",
+    id: "quantity",
     minWidth: 70,
     render: (_, __, idx) => (
       <InputField
@@ -62,18 +80,22 @@ const columns = (remove) => [
   },
   {
     label: "Vendor",
-    id: "_",
-    minWidth: 70,
+    id: "vendor",
+    minWidth: 200,
     render: (_, __, idx) => (
-      <InputField
-        name={`products.${idx}.quantity`}
-        label="Quantity (in units)"
+      <SelectWrapper
+        name={`products.${idx}.vendorID`}
+        label="Select Vendor"
+        color="secondary"
+        options={[
+          ...vendorOptions.map((ele) => ({ value: ele.id, label: ele.name })),
+        ]}
       />
     ),
   },
   {
     label: "Action",
-    id: "_",
+    id: "action",
     minWidth: 40,
     render: (_, __, idx) => (
       <Button color="error" onClick={() => remove(idx)}>
@@ -84,6 +106,7 @@ const columns = (remove) => [
 ];
 
 const initialValues = {
+  modeOfPayment: "",
   products: [
     {
       name: "",
@@ -96,79 +119,99 @@ const initialValues = {
 };
 
 const ProductForm = ({ initVals, handleSubmit, buttonText }) => {
+  const { enqueueSnackbar } = useSnackbar();
+  const router = useRouter();
+  const { data: vendors, isLoading } = useQuery(
+    ["vendors-getall"],
+    () => VendorService.getAll(),
+    {
+      onSuccess: (res) => {},
+      onError: (err) => {
+        enqueueSnackbar(err.response.data.message, { variant: "error" });
+      },
+    }
+  );
+
   return (
-    <Formik
-      initialValues={{ ...initialValues, ...initVals }}
-      validationSchema={ValidationScheme}
-      onSubmit={handleSubmit}
-    >
-      {({ values }) => (
-        <Form style={{ width: "100%" }}>
-          <Grid container mt={5} columnSpacing={3}>
-            <Grid item md={6}>
-              <SelectWrapper
-                name="modeOfPayment"
-                label="Mode Of Payment"
-                color="secondary"
-                sx={{ mb: 2 }}
-                options={[
-                  { value: "cash", label: "Cash" },
-                  { value: "online", label: "Online" },
-                ]}
-              />
+    <div style={{ overflowX: "hidden" }}>
+      <Formik
+        initialValues={{ ...initialValues, ...initVals }}
+        validateOnChange={false}
+        validationSchema={ValidationScheme}
+        onSubmit={handleSubmit}
+      >
+        {({ values }) => (
+          <Form style={{ width: "100%" }}>
+            <Grid container mt={5} columnSpacing={3}>
+              <Grid item md={6}>
+                <SelectWrapper
+                  name="modeOfPayment"
+                  label="Mode Of Payment"
+                  color="secondary"
+                  sx={{ mb: 2 }}
+                  options={[
+                    { value: "cash", label: "Cash" },
+                    { value: "online", label: "Online" },
+                  ]}
+                />
+              </Grid>
+              <Grid item md={6}></Grid>
+              <Grid item md={12}>
+                <InputField
+                  name="note"
+                  label="Purchase Note (Optional)"
+                  sx={{ mb: 2 }}
+                  multiline
+                  minRows={2}
+                />
+              </Grid>
+              <Grid item md={12}>
+                <FieldArray name="products">
+                  {({ insert, remove, push }) => (
+                    <div>
+                      {!isLoading ? (
+                        <StickyHeadTable
+                          rows={values.products}
+                          columns={columns(remove, vendors)}
+                          maxHeight={380}
+                        />
+                      ) : (
+                        <p>Loading...</p>
+                      )}
+                      <Button
+                        sx={{ mt: 1 }}
+                        color="secondary"
+                        onClick={() =>
+                          push({
+                            name: "",
+                            buyPrice: "",
+                            mrp: "",
+                            quantity: "",
+                            vendorID: "",
+                          })
+                        }
+                      >
+                        + Add Product
+                      </Button>
+                    </div>
+                  )}
+                </FieldArray>
+              </Grid>
+              <Grid item md={12}>
+                <Button
+                  sx={{ mt: 5 }}
+                  variant="contained"
+                  color="secondary"
+                  type="submit"
+                >
+                  {buttonText}
+                </Button>
+              </Grid>
             </Grid>
-            <Grid item md={6}></Grid>
-            <Grid item md={12}>
-              <InputField
-                name="note"
-                label="Purchase Note (Optional)"
-                sx={{ mb: 2 }}
-                multiline
-                minRows={2}
-              />
-            </Grid>
-            <Grid item md={12}>
-              <FieldArray name="products">
-                {({ insert, remove, push }) => (
-                  <div>
-                    {console.log(values.products)}
-                    <StickyHeadTable
-                      rows={values.products}
-                      columns={columns(remove)}
-                    />
-                    <Button
-                      sx={{ mt: 1 }}
-                      color="secondary"
-                      onClick={() =>
-                        push({
-                          name: "",
-                          buyPrice: "",
-                          mrp: "",
-                          quantity: "",
-                          vendorID: "",
-                        })
-                      }
-                    >
-                      + Add Product
-                    </Button>
-                  </div>
-                )}
-              </FieldArray>
-            </Grid>
-            <Grid item md={12}>
-              <Button
-                sx={{ mt: 5 }}
-                variant="contained"
-                color="secondary"
-                type="submit"
-              >
-                {buttonText}
-              </Button>
-            </Grid>
-          </Grid>
-        </Form>
-      )}
-    </Formik>
+          </Form>
+        )}
+      </Formik>
+    </div>
   );
 };
 

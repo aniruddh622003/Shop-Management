@@ -8,7 +8,7 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 
-export default function StickyHeadTable({ rows, columns }) {
+export default function StickyHeadTable({ rows, columns, maxHeight }) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -23,7 +23,7 @@ export default function StickyHeadTable({ rows, columns }) {
 
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
-      <TableContainer sx={{ maxHeight: 440 }}>
+      <TableContainer sx={{ maxHeight: maxHeight || 500 }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
@@ -44,7 +44,12 @@ export default function StickyHeadTable({ rows, columns }) {
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row, idx) => {
                 return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                  <TableRow
+                    hover
+                    role="checkbox"
+                    tabIndex={-1}
+                    key={`trow-${page * rowsPerPage + idx}`}
+                  >
                     {columns.map((column) => {
                       if (!column.render) {
                         const value = row[column.id];
@@ -59,7 +64,11 @@ export default function StickyHeadTable({ rows, columns }) {
                         const value = row[column.id];
                         return (
                           <TableCell key={column.id} align={column.align}>
-                            {column.render(value, row, idx)}
+                            {column.render(
+                              value,
+                              row,
+                              page * rowsPerPage + idx
+                            )}
                           </TableCell>
                         );
                       }

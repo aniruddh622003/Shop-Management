@@ -27,13 +27,20 @@ const AddProductPage = () => {
     }
   );
 
-  const handleSubmit = useCallback((values) => {
-    // newVendor({
-    //   name: values.name,
-    //   contact: values.contact,
-    //   address: values.address,
-    // });
-  }, []);
+  const handleSubmit = useCallback(
+    (values) => {
+      newProduct({
+        ...values,
+        products: values.products.map((ele) => ({
+          ...ele,
+          buyPrice: parseFloat(ele.buyPrice),
+          mrp: parseFloat(ele.mrp),
+          quantity: parseInt(ele.quantity),
+        })),
+      });
+    },
+    [newProduct]
+  );
 
   return (
     <Box
