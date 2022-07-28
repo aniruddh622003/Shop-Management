@@ -54,8 +54,10 @@ const ProductList = () => {
     },
     {
       label: "Vendor",
-      id: "vendor.name",
+      id: "vendor",
       minWidth: 170,
+      render: (ele) =>
+        ele.map((vendor) => <p key={`vendor-${vendor.name}`}>{vendor.name}</p>),
     },
     {
       label: "Quantity",

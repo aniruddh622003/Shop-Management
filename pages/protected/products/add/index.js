@@ -4,39 +4,42 @@ import { Formik, Form } from "formik";
 import InputField from "components/shared/InputField";
 import { useSnackbar } from "notistack";
 import { useMutation } from "react-query";
-import VendorService from "/services/Vendor";
 import { useRouter } from "next/router";
+import ProductService from "services/Products";
+import ProductForm from "components/products/ProductForm";
 
-import VendorForm from "components/vendor/VendorForm";
-
-const AddVendorPage = () => {
+const AddProductPage = () => {
   const { enqueueSnackbar } = useSnackbar();
   const router = useRouter();
 
-  const { mutate: newVendor, isLoading: addingVendor } = useMutation(
-    VendorService.create,
+  const { mutate: newProduct, isLoading: addingProduct } = useMutation(
+    ProductService.create,
     {
       onError: (err) => {
         enqueueSnackbar(err.response.data.message, { variant: "error" });
       },
       onSuccess: (res) => {
         console.log(res);
-        enqueueSnackbar("Vendor Created", { variant: "success" });
-        router.replace("/protected/vendor");
-        queryClient.invalidateQueries("vendors-getall");
+        enqueueSnackbar(res.message, { variant: "success" });
+        router.replace("/protected/products");
+        queryClient.invalidateQueries("products-getall");
       },
     }
   );
 
   const handleSubmit = useCallback(
     (values) => {
-      newVendor({
-        name: values.name,
-        contact: values.contact,
-        address: values.address,
+      newProduct({
+        ...values,
+        products: values.products.map((ele) => ({
+          ...ele,
+          buyPrice: parseFloat(ele.buyPrice),
+          mrp: parseFloat(ele.mrp),
+          quantity: parseInt(ele.quantity),
+        })),
       });
     },
-    [newVendor]
+    [newProduct]
   );
 
   return (
@@ -46,15 +49,15 @@ const AddVendorPage = () => {
       }}
     >
       <Typography variant="h5" component="div">
-        Add Vendor
+        Purchase Product(s)
       </Typography>
-      <VendorForm
+      <ProductForm
         initVals={{}}
         handleSubmit={handleSubmit}
-        buttonText="Create Vendor"
+        buttonText="Purchase Product(s)"
       />
     </Box>
   );
 };
 
-export default AddVendorPage;
+export default AddProductPage;

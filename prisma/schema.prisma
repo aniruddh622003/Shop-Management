@@ -15,6 +15,8 @@ model User {
   username String @db.VarChar(255)
   password String @db.VarChar(255)
   enabled Boolean @default(true)
+  purchase Purchase[]
+  sales Sales[]
 }
 
 model Vendor {
@@ -23,6 +25,7 @@ model Vendor {
   address String @db.VarChar(255)
   contact String @db.VarChar(10)
   products Products[]
+  purchaseItems PurchaseItem[]
 }
 
 model Products{
@@ -31,7 +34,60 @@ model Products{
   BuyPrice Float
   MRP Float
   Quantity Int
+  vendor Vendor[]
+  purchaseItems PurchaseItem[]
+  saleItems SaleItem[]
+  @@unique([name, MRP])
+}
+
+model PurchaseItem{
+  id Int @id @default(autoincrement())
+  product Products @relation(fields: [productID], references: [id])
+  productID Int
   vendor Vendor @relation(fields: [vendorID], references: [id])
   vendorID Int
-  @@unique([name, MRP, vendorID])
+  Quantity Int
+  PurchasePrice Float
+  purchase Purchase? @relation(fields: [PurchaseID], references: [id])
+  PurchaseID Int?
+}
+
+model Purchase{
+  id Int @id @default(autoincrement())
+  purchaseItems PurchaseItem[]
+  PurchasedBy User @relation(fields: [purchasedByID], references: [id])
+  purchasedByID Int
+  Note String @db.VarChar(500)
+  transaction Transactions? @relation(fields: [TransactionID], references: [id])
+  TransactionID Int? @unique
+}
+
+model SaleItem{
+  id Int @id @default(autoincrement())
+  product Products @relation(fields: [productID], references: [id])
+  productID Int
+  Quantity Int
+  SellPrice Float
+  sale Sales? @relation(fields: [SaleID], references: [id])
+  SaleID Int?
+}
+
+model Sales{
+  id Int @id @default(autoincrement())
+  saleItems SaleItem[]
+  SoldBy User @relation(fields: [soldByID], references: [id])
+  soldByID Int
+  Note String @db.VarChar(500)
+  transaction Transactions? @relation(fields: [TransactionID], references: [id])
+  TransactionID Int? @unique
+}
+
+model Transactions{
+  id Int @id @default(autoincrement())
+  Date_Time DateTime @default(now())
+  Gain Boolean
+  Amount Float
+  ModeOfPayment String
+  purchase Purchase? 
+  sale Sales?
 }
