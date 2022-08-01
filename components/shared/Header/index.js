@@ -18,7 +18,7 @@ import {
 import React, { useState } from "react";
 import styles from "./index.module.css";
 import { IoPowerSharp } from "react-icons/io5";
-import { inventoryLinks, manageLinks } from "utils/drawerLinks";
+import { transactionLinks, manageLinks } from "utils/drawerLinks";
 import Link from "next/link";
 import { drawerWidth } from "utils/constants";
 import { useRouter } from "next/router";
@@ -59,7 +59,7 @@ const Header = () => {
               Shop Name
             </Typography>
           </Link>
-          <Button color="inherit" onClick={() => logout()}>
+          <Button color="error" variant="outlined" onClick={() => logout()}>
             <IoPowerSharp style={{ marginRight: "10px" }} />
             Log Out
           </Button>
@@ -96,8 +96,8 @@ const Header = () => {
           >
             <li key={`drawer-inventory`}>
               <ul>
-                <ListSubheader>Inventory</ListSubheader>
-                {inventoryLinks.map((ele) => (
+                <ListSubheader>Transactions</ListSubheader>
+                {transactionLinks.map((ele) => (
                   <ListItem key={`drawer-manage-${ele.title}`} disablePadding>
                     <Link href={ele.link}>
                       <ListItemButton>

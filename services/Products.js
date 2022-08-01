@@ -15,6 +15,4 @@ ProductService.create = async (data) => {
   return await res.data;
 };
 
-ProductService.create;
-
 export default ProductService;
