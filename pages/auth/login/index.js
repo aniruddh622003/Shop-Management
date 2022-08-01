@@ -10,7 +10,7 @@ import AddUser from "components/user/AddUser";
 const Login = () => {
   const [username, setUsername] = useState("");
   const [pass, setPass] = useState("");
-  const [addUserOpen, setAddUserOpen] = React.useState(true);
+  const [addUserOpen, setAddUserOpen] = React.useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const router = useRouter();
 

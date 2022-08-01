@@ -1,11 +1,18 @@
 import { BsPerson } from "react-icons/bs";
 import { FaPeopleCarry, FaStore } from "react-icons/fa";
+import { BiPurchaseTagAlt } from "react-icons/bi";
+import { GiExpense } from "react-icons/gi";
 
-export const inventoryLinks = [
+export const transactionLinks = [
   {
-    title: "Products",
+    title: "Inventory",
     icon: <FaStore />,
     link: "/protected/products",
+  },
+  {
+    title: "Expenses",
+    icon: <GiExpense />,
+    link: "/protected/expenses",
   },
 ];
 
